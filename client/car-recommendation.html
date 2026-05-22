@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Your MG – Car Recommendation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/car-recommendation.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">MG</a>
+  <div class="navbar-links">
+    <span>MG Cars</span><span>Locate Dealer</span><span>Service Hub</span><span>Book Now</span><span>More</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24" style="cursor:pointer"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <button class="btn-reserve">Pre-Reserve Majestor</button>
+  </div>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:25%"></div></div>
+
+<!-- QUIZ -->
+<div id="quizSection">
+  <div class="quiz-wrap">
+    <!-- Step indicators -->
+    <div class="step-indicators" id="stepIndicators"></div>
+    <!-- Back -->
+    <button class="back-btn" id="backBtn" style="display:none;" onclick="prevStep()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <!-- Question -->
+    <p class="question-label" id="questionLabel"></p>
+    <h1 class="question-title" id="questionTitle"></h1>
+    <p class="question-sub" id="questionSub"></p>
+    <!-- Options -->
+    <div class="options-grid" id="optionsGrid"></div>
+    <!-- Next -->
+    <div style="display:flex;justify-content:flex-end;">
+      <button class="next-btn" id="nextBtn" onclick="nextStep()">
+        <span id="nextLabel">Continue</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none;">
+
+  <section class="results-hero">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-tag">
+          Personalized Recommendation
+        </div>
+        <h1>Your Ideal MG,<br>Matched Smartly.</h1>
+        <p>
+          Based on your usage pattern, driving preference, lifestyle and budget,
+          these MG vehicles fit your needs best. Ranked by compatibility,
+          ownership practicality and feature preference.
+        </p>
+      </div>
+
+      <div class="hero-match-card">
+        <img src="https://mgmotor.scene7.com/is/image/mgmotor/mgi-hector-header-003?fmt=png-alpha" alt="MG Hector">
+        <div class="hero-match-content">
+          <div class="hero-match-label">
+            Top Recommendation
+          </div>
+          <div class="hero-match-top">
+            <div>
+              <h3>MG Hector</h3>
+              <p>Premium family SUV for comfort-focused buyers.</p>
+            </div>
+            <div class="hero-match-score">
+              <strong>96%</strong>
+              <span>Match</span>
+            </div>
+          </div>
+          <div class="hero-match-pills">
+            <span>ADAS Level 2</span>
+            <span>Premium Cabin</span>
+            <span>Highway Comfort</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ai-insight-panel" id="aiRecommendationBox">
+      <span>AI Recommendation</span>
+      <p id="aiRecommendationText">Your personalized AI advice will appear here.</p>
+    </div>
+  </section>
+
+  <section class="results">
+    <div class="results-grid">
+
+      <div class="car-card">
+        <div class="car-image">
+          <img src="https://mgmotor.scene7.com/is/image/mgmotor/mgi-hector-header-003?fmt=png-alpha" alt="MG Hector">
+          <div class="match-badge">96% Match</div>
+        </div>
+        <div class="card-content">
+          <div class="card-top">
+            <div>
+              <h3>MG Hector</h3>
+              <div class="tagline">Premium family SUV built for long drives and urban comfort.</div>
+            </div>
+            <div class="price"><strong>₹13.99L</strong><span>Ex-showroom</span></div>
+          </div>
+          <div class="smart-note">
+  <span>Premium Interiors</span>
+  <span>Highway Comfort</span>
+  <span>Large Cabin Space</span>
+</div>
+          <div class="spec-grid">
+            <div class="spec"><span>Mileage</span><strong>15 KM/L</strong></div>
+            <div class="spec"><span>Seats</span><strong>5 Seater</strong></div>
+            <div class="spec"><span>ADAS</span><strong>Level 2</strong></div>
+          </div>
+          <div class="ownership">
+            <div><span>EMI Starting</span><strong>₹28,490/mo</strong></div>
+            <div><span>Delivery</span><strong>2 Weeks</strong></div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" onclick="openDriveModal()">Book Test Drive</button>
+            <button class="btn-light" onclick="openCallModal()"><i class="fa-solid fa-phone cta-call__phone"></i></button>
+          </div>
+          <div class="compare">Compare with Astor</div>
+        </div>
+      </div>
+
+      <div class="car-card">
+        <div class="car-image">
+          <img src="https://mgmotor.scene7.com/is/image/mgmotor/hd-img-dsc-007?fmt=png-alpha" alt="MG ZS EV">
+          <div class="match-badge">92% Match</div>
+        </div>
+        <div class="card-content">
+          <div class="card-top">
+            <div>
+              <h3>MG ZS EV</h3>
+              <div class="tagline">Smart electric SUV designed for future ready driving.</div>
+            </div>
+            <div class="price"><strong>₹18.98L</strong><span>Ex-showroom</span></div>
+          </div>
+          <div class="smart-note">
+  <span>Daily City Usage</span>
+  <span>Lower Running Cost</span>
+  <span>Connected Tech</span>
+</div>
+          <div class="spec-grid">
+            <div class="spec"><span>Range</span><strong>461 KM</strong></div>
+            <div class="spec"><span>Charging</span><strong>Fast</strong></div>
+            <div class="spec"><span>AI</span><strong>Voice+</strong></div>
+          </div>
+          <div class="ownership">
+            <div><span>EMI Starting</span><strong>₹34,900/mo</strong></div>
+            <div><span>Charging</span><strong>50 Min</strong></div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" onclick="openDriveModal()">Book Test Drive</button>
+            <button class="btn-light" onclick="openCallModal()"><i class="fa-solid fa-phone cta-call__phone"></i></button>
+          </div>
+          <div class="compare">Compare with Hector</div>
+        </div>
+      </div>
+
+      <div class="car-card">
+        <div class="car-image">
+          <img src="https://mgmotor.scene7.com/is/image/mgmotor/hd-img-dsc-038?fmt=png-alpha" alt="MG Astor">
+          <div class="match-badge">89% Match</div>
+        </div>
+        <div class="card-content">
+          <div class="card-top">
+            <div>
+              <h3>MG Astor</h3>
+              <div class="tagline">Stylish urban SUV focused on smart technology and comfort.</div>
+            </div>
+            <div class="price"><strong>₹11.30L</strong><span>Ex-showroom</span></div>
+          </div>
+          <div class="smart-note">
+  <span>Compact Urban SUV</span>
+  <span>Smart Features</span>
+  <span>Premium Interior</span>
+</div>
+          <div class="spec-grid">
+            <div class="spec"><span>Interior</span><strong>Premium</strong></div>
+            <div class="spec"><span>Safety</span><strong>5 Star</strong></div>
+            <div class="spec"><span>Display</span><strong>AI Voice</strong></div>
+          </div>
+          <div class="ownership">
+            <div><span>EMI Starting</span><strong>₹23,200/mo</strong></div>
+            <div><span>Delivery</span><strong>10 Days</strong></div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" onclick="openDriveModal()">Book Test Drive</button>
+            <button class="btn-light" onclick="openCallModal()"><i class="fa-solid fa-phone cta-call__phone"></i></button>
+          </div>
+          <div class="compare">Compare with ZS EV</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="retake-btn"><button onclick="retake()">Retake the quiz</button></div>
+  </section>
+
+  <section class="savings-section">
+  <div class="savings-wrap">
+    <div class="savings-left">
+      <div class="savings-tag">
+        Ownership Savings Insight
+      </div>
+
+      <h2>
+        You could save up to ₹4.8L over 5 years with MG ZS EV
+      </h2>
+
+      <p>
+        Based on your expected city usage, daily commute and ownership pattern,
+        the MG ZS EV delivers the lowest running cost among your top matches.
+      </p>
+
+      <div class="savings-pills">
+        <span>₹0.9/km running cost</span>
+        <span>Lower maintenance</span>
+        <span>EV charging benefits</span>
+      </div>
+
+    </div>
+
+    <div class="savings-cards">
+
+      <div class="saving-mini-card">
+        <span>MG Hector</span>
+        <strong>₹8.2L</strong>
+        <p>Estimated 5Y fuel + maintenance</p>
+      </div>
+
+      <div class="saving-mini-card active">
+        <span>MG ZS EV</span>
+        <strong>₹3.4L</strong>
+        <p>Estimated 5Y ownership</p>
+      </div>
+
+      <div class="saving-mini-card">
+        <span>MG Astor</span>
+        <strong>₹6.1L</strong>
+        <p>Estimated 5Y fuel + maintenance</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+  <section class="explore-section">
+    <div class="explore-inner">
+      <div class="explore-card">
+        <h3>Compare Cars</h3>
+        <p>Instantly compare pricing, features, mileage and ownership cost between MG models.</p>
+        <button class="btn-primary">Start Comparing</button>
+      </div>
+      <div class="explore-card">
+        <h3>AI Buying Assistant</h3>
+        <p>Ask natural questions like: “Best MG under 20L for family?”</p>
+        <button class="btn-primary">Talk to Arya</button>
+      </div>
+      <div class="explore-card">
+        <h3>Find Nearby Dealer</h3>
+        <p>Connect with your nearest MG showroom and schedule an instant callback.</p>
+        <button class="btn-primary">Locate Dealer</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="arya">
+    <div class="arya-bubble">Need help deciding between Hector and Astor? Ask Arya instantly.</div>
+    <div class="arya-avatar">✦</div>
+  </div>
+
+</div><!-- /resultsSection -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-logo-icon">MG</div>
+      <span>MG Motor India Pvt. Ltd.</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Sitemap</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <p>© 2025 MG Motor India. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- SCHEDULE CALL MODAL -->
+<div class="modal-overlay" id="callModal">
+  <div class="modal">
+    <!-- Step 1: Form -->
+    <div id="callStep1">
+      <div class="modal-header">
+        <div class="modal-header-tag">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.0 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          <span>Schedule a Call</span>
+        </div>
+        <h2>Our expert calls you</h2>
+        <p>Within 2 hours, guaranteed.</p>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="input-wrap with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="callName" placeholder="Rahul Sharma" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mobile Number</label>
+          <div class="input-wrap with-prefix">
+            <span class="input-prefix">+91</span>
+            <input type="tel" id="callPhone" placeholder="9876543210" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')" />
+          </div>
+        </div>
+        <button class="modal-submit" id="sendOtpBtn" onclick="sendOtp()" disabled>Send OTP</button>
+        <p class="modal-note">We'll send a 6-digit OTP to verify your number</p>
+      </div>
+    </div>
+    <!-- Step 2: OTP -->
+    <div id="callStep2" style="display:none;">
+      <div class="modal-header">
+        <div class="modal-header-tag">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Verify Number</span>
+        </div>
+        <h2>Enter OTP</h2>
+        <p id="otpSentTo">Sent to +91 XXXXXXXXXX</p>
+      </div>
+      <div class="modal-body">
+        <div class="otp-grid">
+          <input class="otp-box" maxlength="1" type="tel" id="otp0" oninput="otpInput(0)" onkeydown="otpKey(event,0)" />
+          <input class="otp-box" maxlength="1" type="tel" id="otp1" oninput="otpInput(1)" onkeydown="otpKey(event,1)" />
+          <input class="otp-box" maxlength="1" type="tel" id="otp2" oninput="otpInput(2)" onkeydown="otpKey(event,2)" />
+          <input class="otp-box" maxlength="1" type="tel" id="otp3" oninput="otpInput(3)" onkeydown="otpKey(event,3)" />
+          <input class="otp-box" maxlength="1" type="tel" id="otp4" oninput="otpInput(4)" onkeydown="otpKey(event,4)" />
+          <input class="otp-box" maxlength="1" type="tel" id="otp5" oninput="otpInput(5)" onkeydown="otpKey(event,5)" />
+        </div>
+        <p class="otp-hint">Prototype hint: <strong>1 2 3 4 5 6</strong></p>
+        <p class="resend-row" id="resendRow">Resend OTP in <span id="resendTimer">0:30</span></p>
+        <button class="modal-submit" onclick="verifyOtp()">Verify &amp; Confirm</button>
+        <button class="change-link" onclick="changeNumber()">Change number</button>
+      </div>
+    </div>
+    <!-- Step 3: Success -->
+    <div id="callStep3" style="display:none;">
+      <div class="success-body">
+        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>Call Scheduled!</h2>
+        <p>Our MG expert will call you at <strong id="confirmedPhone">+91 XXXXXXXXXX</strong> within 2 hours. A confirmation SMS has been sent.</p>
+        <button class="modal-close-btn" onclick="closeModal('callModal')">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEST DRIVE MODAL -->
+<div class="modal-overlay" id="driveModal">
+  <div class="modal">
+    <div id="driveStep1">
+      <div class="modal-header">
+        <div class="modal-header-tag">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/></svg>
+          <span>Test Drive</span>
+        </div>
+        <h2>Book a Test Drive</h2>
+        <p>Experience the thrill. No commitment.</p>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="input-wrap with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="driveName" placeholder="Rahul Sharma" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mobile Number</label>
+          <div class="input-wrap with-prefix">
+            <span class="input-prefix">+91</span>
+            <input type="tel" id="drivePhone" placeholder="9876543210" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred Date</label>
+          <div class="input-wrap with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <input type="date" id="driveDate" style="padding-left:36px;" />
+          </div>
+        </div>
+        <button class="modal-submit" id="driveSubmitBtn" onclick="confirmDrive()" disabled>Confirm Booking</button>
+      </div>
+    </div>
+    <div id="driveStep2" style="display:none;">
+      <div class="success-body">
+        <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>Test Drive Confirmed!</h2>
+        <p>Our dealership executive will call <strong id="driveConfPhone">+91 XXXXXXXXXX</strong> to confirm your slot.</p>
+        <button class="modal-close-btn" onclick="closeModal('driveModal')">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/car-recommendation.js"></script>
+</body>
+</html>
