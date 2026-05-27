@@ -34,7 +34,7 @@ async function getRecommendations(params) {
   } = params;
 
   // ── 1. Fetch ALL variants ───────────────────────────────────────────────
-  const [allRows] = await db.query('SELECT * FROM mg_variants');
+  const { rows: allRows } = await db.query('SELECT * FROM mg_variants');
 
   if (!allRows.length) return [];
 
