@@ -152,9 +152,118 @@ function buildWhyThisCar(topVariant, allResults, priorities) {
 
   // Differentiator sentence - features top car has that others don't
   const diff = buildDifferentiatorSentence(v, others);
-  if (diff) sentences.push(diff);
-  
-  return sentences.join(' ');
+
+  return stitchParagraph(v, priorities, sentences, diff);
+}
+
+
+// --- Paragraph stitching: makes the response feel AI-generated -----------
+
+/**
+ * Combines intro + body sentences + closing differentiator into one flowing
+ * paragraph. Uses varied connector phrases between sentences and a deterministic
+ * (but seemingly random) intro that references the user's actual priorities.
+ */
+function stitchParagraph(v, priorities, sentences, diff) {
+  if (!sentences.length && !diff) return '';
+
+  const intro     = pickIntro(v, priorities);
+  const connectors = [
+    '',                      // sentence 1 — no connector
+    'On top of that, ',
+    'Just as importantly, ',
+    'And one more thing — ',
+  ];
+
+  const body = sentences.map((s, idx) => {
+    const prefix = connectors[idx] || 'Beyond that, ';
+    return idx === 0 ? s : prefix + lowercaseFirst(s);
+  }).join(' ');
+
+  let paragraph = intro + ' ' + body;
+
+  if (diff) {
+    // diff already starts with "It's also" — strip it for a cleaner closer
+    const diffClean = diff.replace(/^It's also /, '');
+    paragraph += ' One last thing — ' + diffClean;
+  }
+
+  return paragraph;
+}
+
+/**
+ * Picks one of several intro sentences. If the user shared priorities, the
+ * intro echoes them back — which is what makes the response feel personalised
+ * rather than templated. Deterministic per (variant, priorities) so a given
+ * input always renders the same paragraph.
+ */
+function pickIntro(v, priorities) {
+  const name           = v.model_name;
+  const priorityPhrase = humanisePriorities(priorities);
+  const seed           = hashString((v.model_sales_code || '') + priorities.join('|'));
+
+  if (priorityPhrase) {
+    const personalised = [
+      `Given your focus on ${priorityPhrase}, the ${name} is the clearest fit:`,
+      `You told us ${priorityPhrase} matters most — and that's exactly where the ${name} delivers:`,
+      `With ${priorityPhrase} sitting at the top of your list, the ${name} pulls ahead of the rest:`,
+      `Weighing ${priorityPhrase} against everything else in your shortlist, the ${name} comes out on top:`,
+    ];
+    return personalised[seed % personalised.length];
+  }
+
+  const generic = [
+    `Here's why the ${name} comes out on top for you:`,
+    `After comparing your shortlist side by side, the ${name} stands out:`,
+    `Based on your answers, the ${name} is the strongest match — and here's the reasoning:`,
+    `Looking at the full picture, the ${name} pulls ahead:`,
+  ];
+  return generic[seed % generic.length];
+}
+
+/**
+ * Turns priority keys into natural-language fragments — caps at 2 so the
+ * intro stays readable.
+ */
+function humanisePriorities(priorities) {
+  const LABELS = {
+    city:         'city driving',
+    highway:      'highway comfort',
+    family:       'family use',
+    business:     'an executive feel',
+    mileage:      'fuel economy',
+    adas:         'ADAS safety',
+    comfort:      'cabin comfort',
+    performance:  'performance',
+    large_screen: 'a large infotainment screen',
+    safety:       'safety',
+    premium:      'a premium experience',
+    offroad:      'off-road capability',
+    tech:         'in-car tech',
+    eco:          'eco-friendliness',
+    value:        'value for money',
+  };
+
+  const labels = [...new Set(priorities.map(p => LABELS[p]).filter(Boolean))].slice(0, 2);
+  if (labels.length === 0) return null;
+  if (labels.length === 1) return labels[0];
+  return `${labels[0]} and ${labels[1]}`;
+}
+
+function lowercaseFirst(s) {
+  if (!s) return s;
+  // Don't touch sentences that start with a number or all-caps acronym
+  if (/^[A-Z]{2,}/.test(s)) return s;
+  if (/^\d/.test(s))        return s;
+  return s.charAt(0).toLowerCase() + s.slice(1);
+}
+
+function hashString(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  }
+  return h;
 }
 
 

@@ -1,17 +1,22 @@
 'use strict';
 
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 
-const pool = mysql.createPool({
-  host:               process.env.DB_HOST     || 'localhost',
-  port:               Number(process.env.DB_PORT) || 3306,
-  user:               process.env.DB_USER     || 'root',
-  password:           process.env.DB_PASSWORD || '',
-  database:           process.env.DB_NAME     || 'mgmotors',
-  waitForConnections: true,
-  connectionLimit:    10,
-  queueLimit:         0,
-  timezone:           '+05:30',
-});
+const connectionString = process.env.PG_CONNECTION_STRING;
+
+const pool = connectionString
+  ? new Pool({
+      connectionString,
+      ssl: { rejectUnauthorized: false },
+      max: 10,
+    })
+  : new Pool({
+      host:     process.env.PGHOST     || 'localhost',
+      port:     Number(process.env.PGPORT) || 5432,
+      user:     process.env.PGUSER     || 'postgres',
+      password: process.env.PGPASSWORD || '',
+      database: process.env.PGDATABASE || 'mgmotors',
+      max: 10,
+    });
 
 module.exports = pool;
