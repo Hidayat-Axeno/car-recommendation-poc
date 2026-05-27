@@ -284,7 +284,7 @@ function buildRecommendationPayload() {
 
 async function fetchRecommendations() {
   const payload = buildRecommendationPayload();
-  const res = await fetch('http://localhost:3000/api/recommend', {
+  const res = await fetch('https://car-recommendation-poc.onrender.com/api/recommend', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
